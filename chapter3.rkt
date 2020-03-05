@@ -68,3 +68,25 @@
         '(a b c d e f g d h))
 
 
+(define insertL
+  (lambda (new old lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) old) (cons new lat))
+      (else (cons (car lat) (insertL new old (cdr lat)))))))
+
+(equal? (insertL 'topping 'fudge '(ice cream with fudge for desert))
+        '(ice cream with topping fudge for desert))
+
+(define subst
+  (lambda (new old lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) old) (cons new (cdr lat)))
+      (else (cons (car lat) (subst new old (cdr lat)))))))
+
+(equal? (subst 'topping 'fudge '(ice cream with fudge for desert))
+        '(ice cream with topping for desert))
+
+
+
