@@ -88,5 +88,24 @@
 (equal? (subst 'topping 'fudge '(ice cream with fudge for desert))
         '(ice cream with topping for desert))
 
+(define subst2
+  (lambda (new o1 o2 lat)
+    (cond
+      ((null? lat) '())
+      ((or (eq? (car lat) o1)
+           (eq? (car lat) o2)) (cons new (cdr lat)))
+      (else (cons (car lat) (subst2 new o1 o2 (cdr lat)))))))
+
+(equal? (subst2 'vanilla 'chocolate 'banana '(banana ice cream with chocolate topping for desert))
+        '(vanilla ice cream with chocolate topping for desert))
 
 
+(define multirember
+  (lambda (a lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) a) (multirember a (cdr lat)))
+      (else (cons (car lat) (multirember a (cdr lat)))))))
+
+(equal? (multirember 'cup '(coffee cup tea cup and hick cup))
+        '(coffee tea and hick))
