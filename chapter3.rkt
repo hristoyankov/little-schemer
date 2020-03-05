@@ -109,3 +109,26 @@
 
 (equal? (multirember 'cup '(coffee cup tea cup and hick cup))
         '(coffee tea and hick))
+
+(define multiinsertR
+  (lambda (new old lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) old) (cons old
+                                 (cons new
+                                       (multiinsertR new old (cdr lat)))))
+      (else (cons (car lat) (multiinsertR new old (cdr lat)))))))
+
+(define multiinsertL
+  (lambda (new old lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) old) (cons new (cons old (multiinsertL new old (cdr lat)))))
+      (else (cons (car lat) (mutliinsertL new old (cdr lat)))))))
+
+(define multisubst
+  (lambda (new old lat)
+    (cond
+      ((null? lat) '())
+      ((eq? (car lat) old) (cons new (multisubst new old (cdr lat))))
+      (else (cons (car lat) (multisubst new old (cdr lat)))))))
