@@ -50,3 +50,15 @@
 
 (eq? (X 3 5) 15)
 (eq? (X 13 4) 52)
+
+(define tup+
+  (lambda (tup1 tup2)
+    (cond
+      ((and (null? tup1) (null? tup2)) '())
+      (else (cons (o+ (car tup1)
+                      (car tup2))
+                  (tup+ (cdr tup1)
+                        (cdr tup2)))))))
+
+(equal? (tup+ '(3 6) '(2 3)) '(5 9))
+(equal? (tup+ '(8 4 5) '(3 7 6)) '(11 11 11))
