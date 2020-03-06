@@ -32,3 +32,21 @@
 
 (eq? (o- 14 3) 11)
 (eq? (o- 17 9) 8)
+
+(define addtup
+  (lambda (tup)
+    (cond
+      ((null? tup) 0)
+      (else (o+ (car tup) (addtup (cdr tup)))))))
+
+(eq? (addtup '(3 5 2 8)) 18)
+(eq? (addtup '(15 6 7 12 3)) 43)
+
+(define X
+  (lambda (n m)
+    (cond
+      ((zero? m) 0)
+      (else (o+ n (X n (sub1 m)))))))
+
+(eq? (X 3 5) 15)
+(eq? (X 13 4) 52)
