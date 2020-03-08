@@ -1,6 +1,9 @@
 #lang racket
 (require "preface.rkt")
 
+(provide atom?)
+(provide o+)
+
 (define add1
   (lambda (n)
     (+ n 1)))
