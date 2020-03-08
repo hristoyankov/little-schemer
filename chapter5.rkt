@@ -67,3 +67,82 @@
                        (banana)
                        (bread)
                        (banana brandy))))
+
+(define subst*
+  (lambda (new old l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l))
+       (cond
+         ((eq? (car l) old)
+          (cons new (subst* new old (cdr l))))
+         (else (cons (car l) (subst* new old (cdr l))))))
+      (else
+       (cons (subst* new old (car l))
+             (subst* new old (cdr l)))))))
+
+(equal? (subst* 'orange 'banana '((banana)
+                                  (split ((((banana ice)))
+                                          (cream (banana))
+                                          sherbet))
+                                  (banana)
+                                  (bread)
+                                  (banana brandy)))
+        '((orange)
+          (split ((((orange ice)))
+                  (cream (orange))
+                  sherbet))
+          (orange)
+          (bread)
+          (orange brandy)))
+
+(define insertL*
+  (lambda (new old l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l))
+       (cond
+         ((eq? (car l) old)
+          (cons new (cons old (insertL* new old (cdr l)))))
+         (else (cons (car l) (insertL* new old (cdr l))))))
+      (else
+       (cons (insertL* new old (car l))
+             (insertL* new old (cdr l)))))))
+
+(equal? (insertL* 'pecker 'chuck '((how much (wood))
+                                  could
+                                  ((a (wood) chuck))
+                                  (((chuck)))
+                                  (if (a) ((wood chuck)))
+                                  could chuck wood))
+        '((how much (wood))
+          could
+          ((a (wood) pecker chuck))
+          (((pecker chuck)))
+          (if (a) ((wood pecker chuck)))
+          could pecker chuck wood))
+
+(define member*
+  (lambda (a l)
+    (cond
+      ((null? l) #f)
+      ((atom? (car l))
+       (or (eq? (car l) a)
+           (member* a (cdr l))))
+      (else
+       (or (member* a (car l))
+           (member* a (cdr l)))))))
+
+(eq? #t (member* 'chips '((potato) (chips ((with) fish) (chips)))))
+
+(define leftmost
+  (lambda (l)
+    (cond
+      ((atom? (car l))
+       (car l))
+      (else (leftmost (car l))))))
+
+(eq? (leftmost '((potato) (chips ((with) fish) (chips))))
+     'potato)
+(eq? (leftmost '(((hot) (tuna (and))) cheese))
+     'hot)
