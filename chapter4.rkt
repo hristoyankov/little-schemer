@@ -3,6 +3,7 @@
 
 (provide atom?)
 (provide o+)
+(provide eqan?)
 
 (define add1
   (lambda (n)
