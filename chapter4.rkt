@@ -6,6 +6,7 @@
 (provide X)
 (provide ^)
 (provide eqan?)
+(provide o=)
 
 (define add1
   (lambda (n)
