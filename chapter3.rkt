@@ -1,6 +1,8 @@
 #lang racket
 (require "chapter2.rkt")
 
+(provide multirember)
+
 (define rember
   (lambda (a lat)
     (cond
@@ -124,7 +126,7 @@
     (cond
       ((null? lat) '())
       ((eq? (car lat) old) (cons new (cons old (multiinsertL new old (cdr lat)))))
-      (else (cons (car lat) (mutliinsertL new old (cdr lat)))))))
+      (else (cons (car lat) (multiinsertL new old (cdr lat)))))))
 
 (define multisubst
   (lambda (new old lat)
