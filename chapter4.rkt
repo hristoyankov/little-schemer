@@ -3,6 +3,8 @@
 
 (provide atom?)
 (provide o+)
+(provide X)
+(provide ^)
 (provide eqan?)
 
 (define add1
