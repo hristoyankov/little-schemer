@@ -1,6 +1,8 @@
 #lang racket
 (require "preface.rkt")
 
+(provide member?)
+
 (define lat?
   (lambda (l)
     (cond

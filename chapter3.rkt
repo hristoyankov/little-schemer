@@ -2,6 +2,7 @@
 (require "chapter2.rkt")
 
 (provide multirember)
+(provide firsts)
 
 (define rember
   (lambda (a lat)
