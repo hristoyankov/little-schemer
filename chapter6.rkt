@@ -1,6 +1,10 @@
 #lang racket
 (require "chapter4.rkt")
 
+(provide operator)
+(provide 1st-sub-exp)
+(provide 2nd-sub-exp)
+
 (define numbered?
   (lambda (aexp)
     (cond
