@@ -7,6 +7,7 @@
 (provide ^)
 (provide eqan?)
 (provide o=)
+(provide pick)
 
 (define add1
   (lambda (n)
