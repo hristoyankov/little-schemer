@@ -3,6 +3,12 @@
 (require "chapter2.rkt")
 (require "chapter3.rkt")
 
+(provide a-pair?)
+(provide first)
+(provide second)
+(provide build)
+(provide revpair)
+
 (define set?
   (lambda (lat)
     (cond
