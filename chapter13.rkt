@@ -62,3 +62,66 @@
                             (3 hamburgers))))
 
 
+(define rember
+  (lambda (a lat)
+    (letrec
+        ((R (lambda (lat)
+              (cond
+                ((null? lat) '())
+                ((eq? (car lat) a) (cdr lat))
+                (else (cons (car lat) (R (cdr lat))))))))
+      (R lat))))
+
+(define rember-beyond-first
+  (lambda (a lat)
+    (letrec
+        ((R (lambda (lat)
+              (cond
+                ((null? lat) '())
+                ((eq? (car lat) a) '())
+                (else (cons (car lat) (R (cdr lat))))))))
+      (R lat))))
+
+(equal? '(noodles spaghetti spatzle bean-thread)
+        (rember-beyond-first 'roots '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)))
+(equal? '(noodles spaghetti spatzle bean-thread roots potatoes yam)
+        (rember-beyond-first 'others '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)))
+(equal? '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)
+        (rember-beyond-first 'sweeties '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)))
+(equal? '(cookies chocolate mints
+                  caramel delight ginger snaps)
+        (rember-beyond-first 'deserts '(cookies chocolate mints
+                                                caramel delight ginger snaps
+                                                deserts chocolate mousse
+                                                vanilla ice cream
+                                                German chocolate cake
+                                                more desserts
+                                                gingerbreadman chocolate
+                                                chip brownies)))
+
+(define rember-upto-last
+  (lambda (a lat)
+    (let/cc skip
+      (letrec
+          ((R (lambda (lat)
+                (cond
+                  ((null? lat) '())
+                  ((eq? (car lat) a) (skip (R (cdr lat))))
+                  (else (cons (car lat) (R (cdr lat))))))))
+        (R lat)))))
+
+(equal? '(potatoes yam others rice)
+        (rember-upto-last 'roots '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)))
+(equal? '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)
+        (rember-upto-last 'sweeties '(noodles spaghetti spatzle bean-thread roots potatoes yam others rice)))
+(equal? '(gingerbreadman chocolate chip brownies)
+        (rember-upto-last 'cookies '(cookies
+                                     chocolate mints
+                                     caramel delight ginger snaps
+                                     deserts
+                                     chocolate mousse
+                                     vanilla ice cream
+                                     German chocolate cake
+                                     more cookies
+                                     gingerbreadman chocolate
+                                     chip brownies)))
