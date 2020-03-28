@@ -33,10 +33,10 @@
          (M? (lambda (a lat)
                (letrec
                    ((N? (lambda (lat)
-                            (cond
-                              ((null? lat) #f)
-                              ((eq? (car lat) a) #t)
-                              (else (N? (cdr lat)))))))
+                          (cond
+                            ((null? lat) #f)
+                            ((eq? (car lat) a) #t)
+                            (else (N? (cdr lat)))))))
                  (N? lat)))))
       (U set1))))
 
