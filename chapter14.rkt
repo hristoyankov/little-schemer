@@ -1,5 +1,6 @@
 #lang racket
 (require "preface.rkt")
+(require "chapter4.rkt")
 
 (define leftmost
   (lambda (l)
@@ -61,11 +62,9 @@
       ((atom? (car l))
        (depth* (cdr l)))
       (else
-       (let ((D1 (add1 (depth* (car l))))
-             (D2 (depth* (cdr l))))
-         (cond
-           ((> D1 D2) D1)
-           (else D2)))))))
+       (letrec ((max (lambda (n m)
+                       (if (> n m) n m))))
+         (max (add1 (depth* (car l))) (depth* (cdr l))))))))
 
 (eq? 2 (depth* '((pickled) peppers (peppers pickled))))
 (eq? 4 (depth* '(margarine
@@ -75,4 +74,56 @@
                  butter)))
 (eq? 3 (depth* '(c (b (a b) a) a)))
 
+(define scramble
+  (letrec
+      ((P (lambda (tup prefix)
+            (cond
+              ((null? tup) '())
+              (else
+               (let ((rp (cons (car tup) prefix)))
+                 (cons (pick (car tup) rp)
+                       (P (cdr tup) rp))))))))
+    (lambda (tup)
+      (P tup '()))))
 
+(define leftmost2
+  (let/cc skip
+    (letrec ((lm (lambda (l)
+                   (cond
+                     ((null? l) '())
+                     ((atom? (car l)) (skip (car l)))
+                     (else (let ()
+                             (lm (car l))
+                             (lm (cdr l))))))))
+      (lambda (l)
+        (lm l)))))
+
+(define-syntax try
+  (syntax-rules ()
+    ((try var a . b)
+     (let/cc success
+            (let/cc var (success a)) . b))))
+
+(define rember1*2
+  (lambda (a l)
+    (letrec ((rm (lambda (l oh)
+                   (cond
+                     ((null? l) (oh 'no))
+                     ((atom? (car l))
+                      (if (eq? (car l) a)
+                          (cdr l)
+                          (cons (car l) (rm (cdr l) oh))))
+                     (else
+                      (try oh2
+                           (cons (rm (car l) oh2)
+                                 (cdr l))
+                           (cons (car l)
+                                 (rm (cdr l) oh))))))))
+      (try oh (rm l oh) l))))
+
+(equal? '((Swedish rye)
+          (French (mustard turkey))
+          salad)
+        (rember1*2 'salad '((Swedish rye)
+                            (French (mustard salad turkey))
+                            salad)))
