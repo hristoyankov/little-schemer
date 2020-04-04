@@ -1,6 +1,10 @@
 #lang racket
 (require "preface.rkt")
 
+(provide counter)
+(provide set-counter)
+(provide consC)
+
 (define counter '())
 (define set-counter '())
 
