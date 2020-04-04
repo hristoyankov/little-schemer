@@ -28,10 +28,6 @@
       (else (deep&co (sub1 m) (lambda (x)
                                 (k (cons x '()))))))))
 
-(deep&co 6 (lambda (x) x))
-
-(cons (toppings 'cake) (toppings 'salmon))
-
 (define two-in-a-row?
   (letrec
       ((W (lambda (a lat)
@@ -45,12 +41,6 @@
       (cond
         ((null? lat) #f)
         (else (W (car lat) (cdr lat)))))))
-
-
-(eq? #f (two-in-a-row*? '((mozzarella) (cake) mozzarella)))
-(eq? #t (two-in-a-row*? '((potato) chips ((with) fish) (fish))))
-(eq? #f (two-in-a-row*? '((potato) chips ((with) fish) (chips))))
-(eq? #t (two-in-a-row*? '((potato) chips ((chips) with) (fish))))
 
 (define leave '())
 
@@ -71,8 +61,6 @@
     (let/cc here
       (set! leave here)
       (walk l))))
-
-(start-it '((potato) chips ((chips) with) (fish)))
 
 (define fill '())
 
@@ -96,6 +84,36 @@
       (set! leave here)
       (waddle l))))
 
-(start-it2 '((donuts)
-             (cheerios (cheerios (spaghettios)))
-             donuts))
+(define get-first
+  (lambda (l)
+    (let/cc here
+      (set! leave here)
+      (waddle l)
+      (leave '()))))
+
+(define get-next
+  (lambda (x)
+    (let/cc home-again
+      (set! leave home-again)
+      (fill 'go))))
+
+
+(define two-in-a-row-b*?
+  (lambda (a)
+    (let ((n (get-next 'go)))
+      (if (atom? n)
+          (or (eq? n a)
+              (two-in-a-row-b*? n))
+          #f))))
+
+(define two-in-a-row*?
+  (lambda (l)
+    (let ((fst (get-first l)))
+      (if (atom? fst)
+          (two-in-a-row-b*? fst)
+          #f))))
+
+(eq? #f (two-in-a-row*? '((mozzarella) (cake) mozzarella)))
+(eq? #t (two-in-a-row*? '((potato) chips ((with) fish) (fish))))
+(eq? #f (two-in-a-row*? '((potato) chips ((with) fish) (chips))))
+(eq? #t (two-in-a-row*? '((potato) chips ((chips) with) (fish))))
